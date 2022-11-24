@@ -298,7 +298,7 @@ def main(task='mrpc',
 
             token1 = embedding(input_ids.long())
             
-            logits,attention_score = model(token1.cuda(),input_ids, segment_ids, input_mask)
+            logits,attention_score = model(token1.to(device=get_device()),input_ids, segment_ids, input_mask)
             
             loss1 = criterion(logits, label_id)   
             return loss1
@@ -306,7 +306,7 @@ def main(task='mrpc',
         def evalute_CNN(model, batch,global_step,ls):
             input_ids, segment_ids, input_mask, label_id,seq_lengths = batch
             token1 = embedding(input_ids.long())
-            logits,attention_score = model(token1.cuda(),input_ids, segment_ids, input_mask)
+            logits,attention_score = model(token1.to(device=get_device()),input_ids, segment_ids, input_mask)
             logits=F.softmax(logits)
 
             y_pred11, y_pred1 = logits.max(1)
@@ -323,7 +323,7 @@ def main(task='mrpc',
             label_id = label_id[perm_idx]
             token1 = embedding(input_ids.long())
             
-            logits,attention_score = model(token1.cuda(),input_ids, segment_ids, input_mask,seq_lengths)
+            logits,attention_score = model(token1.to(device=get_device()),input_ids, segment_ids, input_mask,seq_lengths)
             
             loss1 = criterion(logits, label_id)   
             return loss1
@@ -338,7 +338,7 @@ def main(task='mrpc',
             token1 = embedding(input_ids.long())
             
             
-            logits,attention_score = model(token1.cuda(),input_ids, segment_ids, input_mask,seq_lengths)
+            logits,attention_score = model(token1.to(device=get_device()),input_ids, segment_ids, input_mask,seq_lengths)
             logits=F.softmax(logits)
 
             y_pred11, y_pred1 = logits.max(1)
@@ -360,8 +360,8 @@ def main(task='mrpc',
             input_ids = input_ids[perm_idx]
             label_id = label_id[perm_idx]
             token1 = embedding(input_ids.long())
-            logits,attention_score = model(token1.cuda(),input_ids, segment_ids, input_mask)
-            logits2,attention_score2 = model2(token1.cuda(),input_ids, segment_ids, input_mask,seq_lengths)
+            logits,attention_score = model(token1.to(device=get_device()),input_ids, segment_ids, input_mask)
+            logits2,attention_score2 = model2(token1.to(device=get_device()),input_ids, segment_ids, input_mask,seq_lengths)
 
             logits=F.softmax(logits)
             #logits2=F.softmax(logits2)
@@ -514,7 +514,7 @@ def main(task='mrpc',
         def evalute_CNN_SSL(model, batch):
             input_ids, segment_ids, input_mask, label_id,seq_lengths = batch
             token1 = embedding(input_ids.long())
-            logits,attention_score = model(token1.cuda(),input_ids, segment_ids, input_mask)
+            logits,attention_score = model(token1.to(device=get_device()),input_ids, segment_ids, input_mask)
 
             return label_id, logits
         
@@ -559,8 +559,8 @@ def main(task='mrpc',
             token1 = embedding(input_ids.long())
             
             
-            logits,attention_score = model(token1.cuda(),input_ids, segment_ids, input_mask)
-            logits2,attention_score2 = model2(token1.cuda(),input_ids, segment_ids, input_mask,seq_lengths)
+            logits,attention_score = model(token1.to(device=get_device()),input_ids, segment_ids, input_mask)
+            logits2,attention_score2 = model2(token1.to(device=get_device()),input_ids, segment_ids, input_mask,seq_lengths)
             
             
             logits=F.softmax(logits)
@@ -736,7 +736,7 @@ def main(task='mrpc',
             token1 = embedding(input_ids.long())
             
             
-            logits,attention_score = model2(token1.cuda(),input_ids, segment_ids, input_mask,seq_lengths)
+            logits,attention_score = model2(token1.to(device=get_device()),input_ids, segment_ids, input_mask,seq_lengths)
 
             return label_id, logits
         if(dataName == "IMDB"):
@@ -941,7 +941,7 @@ def main(task='mrpc',
             curNum+=1
 
 
-            embedding = nn.Embedding.from_pretrained(weights).cuda()
+            embedding = nn.Embedding.from_pretrained(weights).to(device=get_device())
             criterion = nn.CrossEntropyLoss()
 
             
@@ -1025,20 +1025,20 @@ def main(task='mrpc',
             token1 = embedding(input_ids.long())
             
             
-            logits,attention_score = model2(token1.cuda(),input_ids, segment_ids, input_mask,seq_lengths)
+            logits,attention_score = model2(token1.to(device=get_device()),input_ids, segment_ids, input_mask,seq_lengths)
 
             return label_id, logits
         
         def evalute_CNN_SSL(model, batch):
             input_ids, segment_ids, input_mask, label_id,seq_lengths = batch
             token1 = embedding(input_ids.long())
-            logits,attention_score = model(token1.cuda(),input_ids, segment_ids, input_mask)
+            logits,attention_score = model(token1.to(device=get_device()),input_ids, segment_ids, input_mask)
 
             return label_id, logits
 
         weights = tokenization.embed_lookup2()
         
-        embedding = nn.Embedding.from_pretrained(weights).cuda()
+        embedding = nn.Embedding.from_pretrained(weights).to(device=get_device())
         criterion = nn.CrossEntropyLoss()
 
 
@@ -1051,7 +1051,7 @@ def main(task='mrpc',
                                 data_iter,
                                 save_dir, get_device())
 
-        embedding = nn.Embedding.from_pretrained(weights).cuda()
+        embedding = nn.Embedding.from_pretrained(weights).to(device=get_device())
         results = trainer.eval(evalute_CNN_SSL, evalute_Attn_LSTM_SSL, data_parallel)
         #total_accuracy = torch.cat(results).mean().item()
         #print('Accuracy:', total_accuracy)
