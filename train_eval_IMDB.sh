@@ -8,7 +8,7 @@ mkdir -p temp_data
 mkdir -p data
 
 
-python3.6 model/classifier_imdb.py \
+python model/classifier_imdb.py \
     --task mrpc \
     --mode train \
     --train_cfg train_mrpc.json \
