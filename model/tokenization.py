@@ -11,11 +11,8 @@ import torch
 import numpy as np
 from gensim.test.utils import datapath, get_tmpfile
 from gensim.models import KeyedVectors
-from gensim.scripts.glove2word2vec import glove2word2vec
 
-#glove2word2vec('glove.42B.300d.txt', 'word2vec.txt')
-#embed_lookup = KeyedVectors.load_word2vec_format("word2vec.txt")
-embed_lookup = KeyedVectors.load_word2vec_format("/home/hyeontae/KETI/temp/Sample/word2vec_BERT.txt")
+embed_lookup = KeyedVectors.load_word2vec_format("glove.42B.300d.txt", no_header=True)
 
 def convert_to_unicode(text):
     """Converts `text` to Unicode (if it's not already), assuming utf-8 input."""
@@ -83,15 +80,15 @@ def convert_tokens_to_ids(tokens):
     ids = []
     for token in tokens:
         try:
-            ids.append(embed_lookup.wv.vocab[token].index)
+            ids.append(embed_lookup.vocab[token].index)
         except:
             ids.append(0)
     return ids
 
 def embed_lookup2():
     weights = list()
-    for i in range(0, len(embed_lookup.wv.vocab)):
-        cc = embed_lookup.wv.index2word[i]
+    for i in range(0, len(embed_lookup.index_to_key)):
+        cc = embed_lookup.index_to_key[i]
         #print(cc)
         try:
             #print(fm[cc])
