@@ -12,7 +12,11 @@ import numpy as np
 from gensim.test.utils import datapath, get_tmpfile
 from gensim.models import KeyedVectors
 
-embed_lookup = KeyedVectors.load_word2vec_format("glove.42B.300d.txt", no_header=True)
+try:
+    embed_lookup = KeyedVectors.load('vectors.kv')
+except IOError:
+    embed_lookup = KeyedVectors.load_word2vec_format("glove.42B.300d.txt", no_header=True)
+    embed_lookup.save('vectors.kv')
 
 def convert_to_unicode(text):
     """Converts `text` to Unicode (if it's not already), assuming utf-8 input."""
